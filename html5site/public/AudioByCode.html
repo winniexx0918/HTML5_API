@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        #playlist li:hover {
+            cursor: pointer;
+            text-decoration: underline;
+            color: blue;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <p>歌曲撥放清單</p>
+    <ul id="playlist"></ul>
+
+    <hr />
+    <input type="button" value="pause" id="buttonPause" />
+    <input type="button" value="<" id="buttonPrev" title="上一首" />
+    <input type="button" value=">" id="buttonNext" title="下一首" />
+    <input type="range" id="volume" min="0" max="10" value="5" step="1">
+    <hr />
+    <span id="playSong"></span>
+    <span id="info"></span>
+
+
+    <script>
+        var musics = [{
+                name: "十年",
+                url: "musics/十年.mp3"
+            },
+            {
+                name: "K歌之王",
+                url: "musics/K歌之王.mp3"
+            },
+            {
+                name: "兄妹",
+                url: "musics/兄妹.mp3"
+            },
+            {
+                name: "好就不見",
+                url: "musics/好久不見.mp3"
+            },
+            {
+                name: "我們都寂寞",
+                url: "musics/我們都寂寞.mp3"
+            }
+        ];
+        var index = 0;
+        //將撥放的歌曲顯示在清單中
+        var ul = document.getElementById("playlist");
+        for (var i = 0; i < musics.length; i++) {
+            var eleLi = document.createElement("li");
+            var txtLi = document.createTextNode(musics[i].name);
+            eleLi.setAttribute("onclick", "playsong('" + i + "')");
+            eleLi.appendChild(txtLi);
+            ul.appendChild(eleLi);
+            playlist
+        }
+
+        //建立Audio物件
+        var audio = new Audio();
+
+
+        //播放初始音量
+        //to do 將撥放音量設定成0.5
+        audio.volume = 0.5;
+
+
+        //to do 撥放使用者點選的音樂
+        var spnSong = document.querySelector('#playSong')
+        var spnInfo = document.querySelector('#info')
+
+        function playsong(i) {
+            index = i;
+
+            //從musics的 JSON物件中讀取要撥放的音樂
+            var playingFile = musics[i]; //{ name: "十年", url: "musics/十年.mp3" }
+
+            //將其音樂檔案的位置設定給audio物件
+            audio.setAttribute('src', playingFile.url);
+            //撥放
+            audio.play();
+            //將撥放的音樂名稱顯示在id為playSong的span標籤中
+            spnSong.innerHTML = "現在播放的歌曲:" + playingFile.name;
+        }
+        audio.addEventListener('loadedmetadata', function () {
+            //console.log(audio.duration)
+            m = formatTime(audio.duration);
+        });
+        //在timeupdate事件中
+        //to do 顯示撥放進度
+        audio.addEventListener("timeupdate", function () {
+
+            //目前播放進度
+
+            //整首歌的播放長度
+
+            //將撥放的音樂的進度顯示在id為info的span標籤中
+            spnInfo.innerHTML = formatTime(audio.currentTime) + "/" + m
+        }, false);
+
+
+        //一首歌曲撥放完後，自動撥放下一首歌
+        audio.addEventListener("ended", next, false);
+
+
+        //下一首歌
+        document.getElementById("buttonNext").addEventListener("click", next, false);
+
+        function next() {
+            index = parseInt(index);
+            index += 1;
+            if (index >= musics.length) {
+                index = 0;
+            }
+            //撥歌
+            playsong(index);
+        }
+
+        //上一首歌
+        document.getElementById("buttonPrev").addEventListener("click", function () {
+            index = parseInt(index);
+            index -= 1;
+            if (index <= 0) {
+                index = 0;
+            }
+            //撥歌
+            playsong(index);
+        }, false);
+
+        //to do 暫停及撥放
+        document.getElementById("buttonPause").addEventListener("click", function () {
+            if (this.value == "pause") {
+                //如果button的value是pause
+                //表示按下按鈕就要暫停撥放音樂
+                audio.pause();
+
+
+                this.value = "play";
+            } else {
+                //如果button的value是play
+                //表示按下按鈕就要撥放音樂
+                audio.play();
+
+                this.value = "pause";
+            }
+        }, false);
+
+        //to do 控制音量
+        document.getElementById("volume").addEventListener("input", function () {
+            //設定音量的大小 parseFloat(this.value / 10)
+            audio.volume = parseFloat(this.value / 10)
+        })
+
+        //格式化時間 mm:ss
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            minutes = (minutes >= 10) ? minutes : "0" + minutes;
+            var seconds = Math.floor(seconds % 60);
+            seconds = (seconds >= 10) ? seconds : "0" + seconds;
+            return minutes + ":" + seconds;
+        }
+    </script>
+</body>
+
+</html>

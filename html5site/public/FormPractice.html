@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        div {
+            border-bottom: 1px solid #efefef;
+            width: 480px;
+            margin: 0px auto;
+            padding-bottom: 10px;
+        }
+
+        .title {
+            float: left;
+            width: 100px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        input[type="submit"] {
+
+            margin-left: 110px;
+
+        }
+
+        fieldset {
+            border: 1px solid #CCA383;
+            border-radius: 10px;
+            margin: 0px auto;
+            width: 480px;
+            background: #FFE8EF;
+            padding: 3px;
+        }
+
+        fieldset>legend {
+            background: #CCE8CC;
+            padding: 6px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <fieldset>
+        <legend>會員註冊</legend>
+        <form>
+            <!-- novalidate取消驗證與表單中預設驗證，防止驗證視窗不統一。註:也可放在submit按鈕裡放formnovalidate，兩者二擇一‧。 -->
+            <div>
+                <label for="account" class="title">帳號</label>
+                <input type="text" id="account" name="account" autofocus autocomplete="off" required />
+                <!-- 
+                    1.網頁載入時將游標停駐在帳號的文字輸入方塊中
+                    2.取消瀏覽器會自動記錄輸入資料的功能 
+                    3.請確定帳號一定要輸入-->
+            </div>
+            <div>
+                <label for="pwd1" class="title">密碼</label>
+                <input type="password" id="pwd1" name="pwd1" />
+            </div>
+            <div>
+                <label for="pwd2" class="title">密碼確認</label>
+                <input type="password" id="pwd2" name="pwd2" />
+            </div>
+            <div>
+                <label for="email" class="title">電子郵件</label>
+                <input type="email" id="email" name="email" />
+                <!--1.請填入正確type的屬性值. 2.確定符合正確的電子郵件格式-->
+            </div>
+            <div>
+                <label for="blog" class="title">部落格</label>
+                <input type="url" id="blog" name="blog" />
+                <!--1.請填入正確type的屬性值. 2.確定符合正確的網址格式-->
+            </div>
+            <div>
+                <label for="phone" class="title">連絡電話</label>
+                <input type="tel" id="phone" name="phone" placeholder="0911-111-111" pattern="09\d{2}-\d{3}-\d{3}"
+                    required />
+                <!--
+                    1.請填入正確的type. 
+                    2.提示使用者輸入正確的手機格式(0911-111-111) 
+                    3.確定手機格式正確(09\d{2}-\d{3}-\d{3})-->
+            </div>
+            <div>
+                <label for="age" class="title">年紀</label>
+                <input id="age" name="age" type="number" step="5" max="100" min="10" value="20" /><br />
+                <!--1.請填入正確的type. 2.最小值10 3.最大值100 4.預設值20-->
+            </div>
+            <div class="submit">
+                <input type="submit" value="送出" />
+            </div>
+        </form>
+    </fieldset>
+    <script>
+        //要找到控制的對象  selectors id
+        //綁定事件 事件發生時
+        //根據使用者行為(事件) blur
+        //要找到控制的對象
+        //去改變內容或樣式
+        // var pwd2 = document.querySelector('#pwd2')
+        // pwd2.addEventListener('blur', check)
+
+        // function check() {
+        //     var pwd1 = document.querySelector('#pwd1')
+        //     if (pwd1.value !== this.value) {
+        //         alert('密碼不一致!!')
+        //     }
+        // }
+///////////////////////
+        var inputs = document.querySelectorAll('input')
+        for (var i = 0, max = inputs.length; i < max; i++) {
+            inputs[i].addEventListener('blur', validate)
+        }
+
+        function validate() {
+            // console.log(this.validity)
+            var s = this.validity;
+            var msg = "";
+            switch (true) {
+                case s.valueMissing:
+                    msg = "請輸入帳號";
+                    break;
+                case s.typeMismatch:
+                    msg = "請輸入正確的mail type";
+                    break;
+                case s.patternMismatch:
+                    msg = "請輸入正確的pattern";
+                    break;
+            }
+            this.setCustomValidity(msg);
+
+        }
+    </script>
+</body>
+
+</html>

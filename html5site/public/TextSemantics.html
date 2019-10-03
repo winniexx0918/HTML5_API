@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		
+	</head>
+	<body>
+	
+			<div>
+				The case <cite>Hugo v. Danielle</cite> is relevant here.
+				<hr />
+				These grapes are made into wine. <small>Alcohol is addictive.</small>
+				<hr />
+				<ruby>漢<rt>ㄏㄢˋ</rt>字<rt>ㄗˋ　</rt></ruby>
+				<hr />
+				<ruby> OJ <rp>(<rt>Orange Juice<rp>)</ruby>
+					<hr />
+				Price: <s>£4.50</s> £2.00!
+			</div>
+			<p>
+        <!--
+            s - 定義不再精確或不再相關的文本（s 是 strike 的縮寫）
+        -->
+        <s>原價：5000元</s>
+    </p>
+    <p>
+        <strong>促銷價：5元</strong>
+    </p>
+    <p>
+        <!--
+            cite - 用於定義引用內容（書籍或雜志等）的標題
+        -->
+        我最喜歡看高爾基的<cite>海燕</cite>，不過忘了講的是什麼了
+    </p>
+
+    <!--
+        區別：
+        cite 標簽用於定義引用內容的標題；blockquote 標簽用來定義較長的引用；q 標簽用來定義較短的內容
+    -->
+     <!--
+        q - 用於定義一段引用的內容（短內容）（q 是 quote 的縮寫）
+          cite - 引用的內容的來源 url
+    -->
+    <q cite="http://webabcd.cnblogs.com/">從 http://webabcd.cnblogs.com 裏引用的一段短內容</q>
+
+    <!--
+        區別：
+        cite 標簽用於定義引用內容的標題；blockquote 標簽用來定義較長的引用；q 標簽用來定義較短的內容
+    -->	
+      <!--
+        abbr - 定義一個縮寫文本，建議在 abbr 的 title 屬性中描述縮寫的全稱（abbr 是 abbreviation 的縮寫）
+    -->
+    <abbr title="World Trade Organization">WTO</abbr>
+      <!--
+        dfn - 用於定義一個術語（dfn 是 defining instance 的縮寫）
+    -->
+    <dfn>
+        <abbr title="World Trade Organization">WTO</abbr>
+    </dfn>
+    <!--
+        time - 定義日期、時間文本
+          datetime - 定義元素的日期時間，如果不設置此屬性則必須在 time 元素的內容中設置日期時間
+          pubdate - bool 類型，標識 time 是否是發布日期。在 article 中則代表當前 article 的發布日期，否則代表整個 html 的發布日期
+          valueAsDate - 只讀屬性，將 time 中的日期時間轉換为 Date 對象，目前無瀏覽器支持
+    -->
+
+    <!--
+        datetime 格式：YYYY-MM-DDThh:mm:ssTZD，示例：2008-02-16T13:50Z, 2008-02-16T13:50+08:00
+          T - 代表時間，其前半部分为日期，後半部分为時間
+          TZD - Z 或 +hh:mm 或 -hh:mm 用於標識時區，其中 Z 代表 0 時區
+    -->
+
+    <p>
+        我的生日和 <time datetime="1980-02-14">情人節</time> 是同一天
+    </p>
+    <p>
+        我每天 <time>9:00</time> 上班
+    </p>
+    
+    <article>
+        <p>我是 article 的內容</p>
+        <footer>
+            本 article 的發布日期是 <time datetime="2011-09-14" pubdate>昨天</time>
+         </footer>
+    </article>
+    
+    <ruby>
+        王睿軒
+        <rp>(</rp>
+        <rt>wangruixuan</rt>
+        <rp>)</rp>
+   </ruby>
+	</body>
+</html>
