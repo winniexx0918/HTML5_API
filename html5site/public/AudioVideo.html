@@ -10,7 +10,13 @@
     <audio src="musics/好久不見.mp3" controls>
       <a href="musics/好久不見.mp3">download</a>     <!-- 如果瀏覽器不支援會提供連結下載 -->
     </audio>
-    <video src="videos/big_buck_bunny.mp4" controls></video>
+    <video controls>
+    <source src="videos/big_buck_bunny.mp4" type="video/mp4" />
+    <source src="videos/big_buck_bunny.ogv" type="video/mp4" />
+    <source src="videos/big_buck_bunny.webm" type="video/mp4" />
+    <track kind="subtitles" src="videos/bunny_en.vtt" srclang="English" default />
+      <track kind="subtitles" src="videos/bunny_zhtw.vtt" srclang="繁中"  />
+    </video>
     
 </body>
 </html>
