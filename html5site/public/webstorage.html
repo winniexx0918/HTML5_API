@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>web storage</title>
+</head>
+
+<body>
+    <input type="text" placeholder="local storage" id="text1">
+    <input type="text" placeholder="session storage" id="text2">
+    <input type="button" value="寫入" id="button1">
+    <input type="button" value="讀取" id="button2">
+    <script>
+        var text1 = document.querySelector('#text1');
+        var text2 = document.querySelector('#text2');
+        var button1 = document.querySelector('#button1');
+        var button2 = document.querySelector('#button2');
+
+        button1.addEventListener('click', function () {
+            localStorage.setItem("local", text1.value);
+            sessionStorage.setItem("session", text2.value);
+        })
+        button2.addEventListener('click', function () {
+            console.log(localStorage.getItem('local'));
+            console.log(sessionStorage.getItem('session'));
+        })
+        /////////////////////////////////讀取所有localStorage中的資料
+        // console.log(localStorage.length)
+        // for(var i=0,max=localStorage.length; i<max; i++){
+        //     var keyName =localStorage.key(i)
+        //     console.log(keyName)
+        //     // console.log(localStorage.getItem(keyName));
+        // }
+        /////////////////////////////////刪除一筆localStorage中的資料
+        //localStorage.removeItem('local');
+
+        /////////////////////////////////刪除所有localStorage的資料
+        localStorage.clear();
+    </script>
+</body>
+
+</html>
