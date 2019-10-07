@@ -1,22 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Audio And Video</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Audio And Video</title>
+  <style>
+    .v {
+      margin: 5px;
+      box-shadow: 3px 2px 4px silver;
+    }
+  </style>
 </head>
+
 <body>
-    <audio src="musics/好久不見.mp3" controls>
-      <a href="musics/好久不見.mp3">download</a>     <!-- 如果瀏覽器不支援會提供連結下載 -->
-    </audio>
-    <video controls>
+  <audio src="musics/好久不見.mp3" controls>
+    <a href="musics/好久不見.mp3">download</a> <!-- 如果瀏覽器不支援會提供連結下載 -->
+  </audio>
+  <video controls id="video1">
     <source src="videos/big_buck_bunny.mp4" type="video/mp4" />
     <source src="videos/big_buck_bunny.ogv" type="video/mp4" />
     <source src="videos/big_buck_bunny.webm" type="video/mp4" />
     <track kind="subtitles" src="videos/bunny_en.vtt" srclang="English" default />
-      <track kind="subtitles" src="videos/bunny_zhtw.vtt" srclang="繁中"  />
-    </video>
-    
+    <track kind="subtitles" src="videos/bunny_zhtw.vtt" srclang="繁中" />
+  </video>
+  <hr>
+  <input type="button" value="擷取" id="button1">
+  <div id="div1"></div>
+
+  <script>
+    var btn = document.querySelector('#button1');
+    var myVideo = document.querySelector('#video1')
+    var myDiv = document.querySelector('#div1')
+
+    btn.addEventListener('click', function () {
+      var canvas = document.createElement("canvas");
+      var context = canvas.getContext('2d');
+      canvas.setAttribute('width', '320px')
+      canvas.setAttribute('height', '160px')
+      canvas.className = 'v';
+      context.drawImage(myVideo, 0, 0, canvas.width, canvas.height);
+      myDiv.appendChild(canvas);
+
+    })
+  </script>
 </body>
+
 </html>
