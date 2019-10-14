@@ -90,6 +90,9 @@
             openDb.addEventListener('upgradeneeded', function (event) {
                 console.log('upgradeneeded');
                 db = event.target.result;
+                if (db.objectStoreNames.contains("employees")) {
+                    console.log("employees存在")
+                } else {
                 var store = db.createObjectStore("employees", {
                     "keyPath": "employeeId",
                     "autoIncrement": true
@@ -100,6 +103,7 @@
                 store.createIndex("ageIndex", "age", {
                     unique: false
                 });
+                }
             })
         }
 
@@ -195,15 +199,40 @@
             } else {
                 var trans = db.transaction(["employees"], "readonly");
                 var store = trans.objectStore("employees");
-                
-                var cursorRequest = store.openCursor();
+
+                //讀取所有資料
+                //var cursorRequest = store.openCursor();
                 //console.log(cursorRequest)
+
+                //根據 key path 搜尋資料
+                //var cursorRequest = store.openCursor(IDBKeyRange.only(7));
+
+                //切換Index
+                // var nameIdx = store.index("nameIndex");
+                // var cursorRequest = nameIdx.openCursor(IDBKeyRange.only("Eric"));
+
+                var ageIdx = store.index("ageIndex");
+                //age < 30
+               // var cursorRequest = ageIdx.openCursor(IDBKeyRange.upperBound(30,true))
+                //age >= 30
+                //var cursorRequest = ageIdx.openCursor(IDBKeyRange.lowerBound(30,false))
+                 //age 28-32
+                var cursorRequest = ageIdx.openCursor(IDBKeyRange.bound(28,32,false,true))
+
+
+                //console.log(cursorRequest)
+
                 cursorRequest.addEventListener("success",function(event){
+                    //console.log(event.target.result)
+                    //console.log(event.target.result.value)
                     //console.log(event.target.result.value.name)
                     var result = event.target.result
+
+                    //讀不到資料離開此function
                     if(!result) return                    
                     
                     console.log(result.value.name);
+                    //讀下一筆資料
                     result.continue();
 
                 })
@@ -212,7 +241,17 @@
 
         //透過Index讀取資料
         function readDataByIndex() {
-
+            if (db == null) {
+                alert('請先開啟資料庫')
+            } else {
+                var trans = db.transaction(["employees"], "readonly");
+                var store = trans.objectStore("employees");
+                var nameIdx = store.index("nameIndex");
+                var getRequest = nameIdx.get("Leo");
+                getRequest.addEventListener("success",function(event){
+                console.log(event.target.result.email)  //{}
+                })
+            }
         }
     </script>
 </head>

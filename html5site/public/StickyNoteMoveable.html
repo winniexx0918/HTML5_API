@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>我的便利貼</title>
+    <style>
+        .note {
+            width: 180px;
+            height: 170px;
+            background-color: #fdfcbb;
+            box-shadow: 2px 5px 5px gray;
+            float: left;
+            margin: 5px;
+            position: absolute;
+        }
+
+        .noteTitle {
+            width: 180px;
+            height: 24px;
+            background-color: #f8f7b6;
+        }
+
+        .noteContent {
+            width: 160px;
+            height: 136px;
+            padding: 5px 10px 5px 10px;
+        }
+
+        .addIcon {
+            display: block;
+            float: left;
+            padding: 4px;
+        }
+
+        .delIcon {
+            display: block;
+            float: right;
+            padding: 4px;
+        }
+
+        body > .note:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+
+        body > .note:nth-child(odd) {
+            transform: rotate(-1deg);
+        }
+
+
+        body > .note:nth-child(3n) {
+            transform: rotate(1deg);
+        }
+
+        body > .note:hover {
+            box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.4);
+            transform: rotate(0deg);
+            z-index: 10;
+            background-color: #ffd800;
+        }
+    </style>
+    <script>
+        window.addEventListener("load", init, false);
+        function init() {
+            //按下新增便利貼按鈕
+            var btnNote = document.getElementById("addNote");
+            btnNote.addEventListener("click", function () { addNote(); }, false);
+
+            //按下清除所有便利貼按鈕
+            var btnRemove = document.getElementById("removeAllNote");
+            btnRemove.addEventListener("click", function () {
+                //加入清除所有localStorage的程式,使用clear方法
+                localStorage.clear();  //請將 "_______" 換成正確的程式
+                location.reload();
+
+            }, false);
+
+            //寫個迴圈讀出localStorage中的key及value資料,並將此資料傳給addNote(key,value)方法
+            for (var i = 0; i < localStorage.length ; i++) {  
+                //請將 "_______" 換成正確的程式，取得localstoage上有幾筆資料;
+                var key = localStorage.key(i);                
+                //請將 "_______" 換成正確的程式，以index取得key名稱;
+                if (key.substr(0, 4) == "note") {
+                    var value = localStorage.getItem(key);        //請將 "_______" 換成正確的程式，使用getItem()取得key的值;
+                    addNote(key, value);
+                }
+            }
+
+            //讓便利貼可以移動
+            document.addEventListener("mousedown", mousedownHandler, false);
+            document.addEventListener("mouseup", mouseupHandler, false);
+
+        }
+        var divTop = 50;
+        var divLeft = 0;
+        var k = 0;
+        function addNote(key, value) {
+
+            //如果沒有傳key進來
+            //就自己產生一個key
+            var id;
+            if (!!key) {
+                id = key;
+            }
+            else {
+                id = "note_" + new Date().getTime();
+            }
+
+            //設定產生便利貼的位置
+            if (divLeft != 0) {
+                divLeft += 200; //100 + (200 * k);
+                if (divLeft >= 1200) {
+                    divTop += 200;
+                    divLeft = 50;
+                }
+            }
+            else {
+                divLeft = 50;
+            }
+            //建立便利貼
+            var mainDiv = document.createElement("div");
+            mainDiv.setAttribute("class", "note");
+            mainDiv.setAttribute("id", id);
+            mainDiv.setAttribute("style", "top:" + divTop + "px;left:" + divLeft + "px");
+
+
+            //建立便利貼的Title
+            var titleDiv = document.createElement("div");
+            titleDiv.setAttribute("class", "noteTitle");
+
+            //建立新增圖示
+            var addImg = document.createElement("img");
+            addImg.setAttribute("src", "images/icon-add.png");
+            addImg.setAttribute("class", "addIcon");
+            //按下新增的圖示會呼叫addNote(),來產生新的便利貼
+            addImg.setAttribute("onclick", "addNote()");
+
+            titleDiv.appendChild(addImg);
+
+            //建立刪除圖示
+            var delImg = document.createElement("img");
+            delImg.setAttribute("src", "images/icon-delete.png");
+            delImg.setAttribute("class", "delIcon");
+            //按下刪除的圖示會呼叫deleteNote(id),來刪除便利貼
+            delImg.setAttribute("onclick", "deleteNote('" + id + "')");
+            titleDiv.appendChild(delImg);
+
+
+            //建立便利貼的內容
+            var contentDiv = document.createElement("div");
+            if (!!value) {
+                var txtDiv = document.createTextNode(value);
+                contentDiv.appendChild(txtDiv);
+            }
+            contentDiv.setAttribute("class", "noteContent");
+            contentDiv.setAttribute("contenteditable", "true");  //允許編輯div的內容
+            //當使用者輸入完便利貼的內容後,離開此便利貼
+            //會呼叫save(id)的方法來儲存便利貼的內容
+            contentDiv.setAttribute("onblur", "save('" + id + "')");
+
+            mainDiv.appendChild(titleDiv);
+            mainDiv.appendChild(contentDiv);
+
+            document.body.appendChild(mainDiv);
+        }
+
+        //儲存便利貼的內容
+        function save(key) {
+            var obj = document.getElementById(key);
+            var value = obj.childNodes[1].firstChild.nodeValue;
+
+            if (value.length > 0) {
+                //將使用者輸入的內容,使用setItem的方法存到localStorage中
+                localStorage.setItem(key,value);  //請將 "_______" 換成正確的程式;
+            }
+
+        }
+        function deleteNote(key) {
+            var obj = document.getElementById(key);
+            obj.parentNode.removeChild(obj);
+            //使用removeItem的方法,刪除某一筆localStorage中的資料
+           localStorage.removeItem(key);  //請將 "_______" 換成正確的程式;
+        }
+
+        //移動便利貼
+        var dragObj;
+        var _startX = 0;            // mouse starting positions
+        var _startY = 0;
+        var _offsetX = 0;           // current element offset
+        var _offsetY = 0;
+        var z = 0;
+        function mousedownHandler(e) {
+            if (e.target.parentNode.className == 'note') {
+                dragObj = e.target.parentNode;
+                var t = dragObj.style.top;
+                var l = dragObj.style.left;
+                z += 1;
+                dragObj.setAttribute("style", "top:" + t + ";left:" + l + ";z-index:" + z);
+
+                _startX = e.clientX;
+                _startY = e.clientY;
+                _offsetX = dragObj.offsetLeft;
+                _offsetY = dragObj.offsetTop;
+
+                document.addEventListener("mousemove", mousemoveHandler, false);
+            }
+        }
+        function mouseupHandler(e) {
+            document.removeEventListener("mousemove", mousemoveHandler, false);
+        }
+        function mousemoveHandler(e) {
+
+            dragObj.style.left = (_offsetX + e.clientX - _startX) + 'px';
+            dragObj.style.top = (_offsetY + e.clientY - _startY) + 'px';
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="新增便利貼" id="addNote"/>
+    <input type="button" value="清除所有便利貼" id="removeAllNote">
+    <hr />
+<!-- <div class="note" id="note_1">
+        <div class="noteTitle">
+            <img src="../images/icon-add.png" alt="add" class="addIcon" onclick="addNote()" />
+            <img src="../images/icon-delete.png" alt="delete" class="delIcon" onclick="deleteNote('note_1')" />
+        </div>
+        <div class="noteContent" contenteditable="true"></div>
+    </div>  -->
+</body>
+</html>
