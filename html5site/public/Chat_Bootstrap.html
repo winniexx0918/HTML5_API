@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input type="text" id="userName" class="form-control" placeholder="姓名">
+                </div>
+                <button type="button" id="buttonLogin" class="btn btn-default">登入</button>
+            </form>
+        </nav>
+
+        <div class="row">
+
+            <div class="col-sm-10">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Chating Content <span id="spnUserName"
+                            class="glyphicon glyphicon-user pull-right"></span></div>
+                    <div id="messageBox" class="panel-body">
+                        <div id="messageList"></div>
+                    </div>
+                </div>
+                <div id="bar">
+
+                    <div class="col-sm-10">
+                        <input type="text" id="message" class="form-control" placeholder="請輸入訊息" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" id="buttonSend" value=" 發送 " />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        //步驟一連線到SocketServer
+        var socket = new WebSocket("ws://localhost:8080/")
+
+
+        //message事件
+        socket.addEventListener("message", function (event) {
+            var data = JSON.parse(event.data);
+            var eleP = document.createElement("p");
+            var txtP = document.createTextNode(data.name + "@" + formatTime(new Date(data.time)) + ":" + data.text);
+            eleP.appendChild(txtP);
+            document.querySelector("#messageList").appendChild(eleP);
+
+        })
+
+
+
+
+        document.querySelector("#buttonLogin").addEventListener("click", function () {
+            var userName = document.querySelector("#userName");
+            userName.disabled = true;
+            this.disabled = true;
+            var name = userName.value; //使用者登入帳號
+            document.querySelector("#spnUserName").innerHTML = " " + name;
+
+            //將姓名發送到SocketServer    JSON.stringify({name:name})
+            socket.send(JSON.stringify({ "name": name }))
+
+        })
+
+        document.querySelector("#buttonSend").addEventListener("click", function () {
+            var message = document.querySelector("#message").value;
+
+            //將訊息發送到SocketServer    JSON.stringify({ message: message })
+            socket.send(JSON.stringify({ "message": message }))
+
+        })
+
+        function formatTime(dt) {
+            return (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' +
+                (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ':' +
+                (dt.getSeconds() < 10 ? '0' + dt.getSeconds() : dt.getSeconds());
+        }
+    </script>
+</body>
+
+</html>
