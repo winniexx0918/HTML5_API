@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket Client Demo</title>
+</head>
+<body>
+    <div id="div1"></div>
+
+    <script>
+       var theDiv = document.querySelector('#div1');
+
+       
+       //建立websocket物件
+       var client = new WebSocket("ws://echo.websocket.org")
+       //成功連線到Socket Server會觸發open事件
+       client.addEventListener("open",function(){
+         theDiv.innerHTML += "連線成功!!<br>"
+
+         //將資料傳給Socket Server
+         client.send("Hello WebSocket!!")
+       })
+       //接收Socket Server傳回來的資料
+       client.addEventListener("message",function(event){
+         theDiv.innerHTML += event.data +  "<br>"
+         //關閉連線
+         client.close();
+       })
+       //Socket Server連線的關閉會觸發close事件
+       client.addEventListener("close",function(event){
+         theDiv.innerHTML += "連線關閉!!<br>"
+       })
+    </script>
+</body>
+</html>

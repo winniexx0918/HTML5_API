@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SSE_Client
+    </title>
+</head>
+
+<body>
+    <input type="button" value="start" id="button1">
+    <h2 id="myTimeText"></h2>
+    <script>
+        var btn = document.querySelector('#button1');
+        var theH = document.querySelector('#myTimeText');
+        var client = null;
+
+        btn.addEventListener('click', function () {
+            if (btn.value == "start") {
+                btn.value = "stop";
+                client = new EventSource('/api/events')
+                //    client.addEventListener("open",function(){
+                //        console.log("連線建立成功!!")
+                //    })
+                client.addEventListener("message", function (event) {
+                    // console.log(event.data)
+                    //   theH.innerHTML += event.data + "<br>"; 不會重疊
+                    theH.innerHTML = event.data;
+                })
+            } else {
+                client.close();
+                btn.value = "start";
+            }
+
+        })
+    </script>
+</body>
+
+</html>
