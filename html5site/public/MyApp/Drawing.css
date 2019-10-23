@@ -1,0 +1,21 @@
+﻿#myCanvas {
+    border: 1px green solid;
+}
+
+#div1 {
+    float: left;
+    width: 500px;
+}
+
+div > label {
+    width: 100px;
+    /*text-align:right;*/
+    margin-right: 5px;
+    display: inline-block;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+
+#div2{
+    padding-top:100px;
+}

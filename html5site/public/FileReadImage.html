@@ -31,14 +31,49 @@
         /////////////////////////////////////第一種使用檔案選取元件
         document.querySelector('#file1').addEventListener('change', function () {
             // console.log(this.files)
-            fileInfo = this.files[0]; //this.files[0]就是File Object
-        })
+            for (var i = 0, max = this.files.length; i < max; i++) {
+                fileInfo(this.files[i]);
+                //把檔案加到陣列中
+                //再把陣列中的資料傳給fileInfo
+            }
+        });
 
         function fileInfo(theFile) {
             // console.log(theFile.name); //檔案名稱
             // console.log(theFile.type); //檔案類型
             // console.log(theFile.size); //檔案大小
             // console.log(theFile.lestModifiedData); //校正日期
+
+            //檔案上傳
+            var formData = new FormData();
+            formData.append("myFile", theFile);
+
+            // //ajax
+            // var xhr = new XMLHttpRequest();
+            // //xhr.open('HTTP Method','Server端的程式')
+            // xhr.addEventListener("load", function () {
+            //     //xhr.responseText 會得到伺服器回傳的結果
+            //     console.log(xhr.responseText);
+            // });
+            // xhr.open("POST", "/api/upload");
+            // xhr.send(formData);
+
+            //fetch()
+            fetch("/api/upload", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(function (data) {
+                    console.log(data);
+                    return data.json();
+                })
+                .then(function (data) {
+                    console.log(data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
 
             /////////////////////////////////////讀取檔案內容
             var reader = new FileReader();

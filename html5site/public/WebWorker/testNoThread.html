@@ -1,0 +1,54 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Untitled Document</title>
+		<script type="text/javascript">
+			
+			function cal()
+			{
+				var a=document.getElementById("a");
+				var b=document.getElementById("b");
+				var c=document.getElementById("c");
+				
+				c.value=eval(parseInt(a.value)+parseInt(b.value));
+			}
+			
+			function sosucal()
+			{
+				var count=0;
+ 
+				 for(var n=2;n<=10000000;n++)
+				 {
+				 	var is_prime=true;
+					for (var i = 2; i <= Math.sqrt(n); i++) 
+					{
+						if (n % i == 0) {
+							is_prime = false;
+							break;
+						}
+					}
+						
+						if(is_prime)
+						{
+							count++;
+							document.getElementById("result").innerHTML="發現"+count+"個"+n;
+						}	
+				 }
+				 
+				 document.getElementById("result").innerHTML="1000萬以下的質數一共有"+count+"個。";
+				 
+			}
+			
+			
+				
+			
+		</script>
+	</head>
+	<body>
+		<div id="result">計算中</div>
+        <input type="button" value="質數計算" onclick="sosucal()" /><br />
+		<input type="text" id="a" name="a">+<input type="text" id="b" name="b">=<input type="text"  id="c" name="c">
+		<input type="button" value="Calculate" onclick="cal()">
+	</body>
+</html>

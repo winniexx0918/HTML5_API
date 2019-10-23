@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SharePage1</title>
+</head>
+<body>
+    <input type="button" value="click" id="button1">
+    <div id="div1"></div>
+
+    <script>
+      document.querySelector('#button1').addEventListener("click",function(){
+          //建立一個Shared Worker的物件
+          var worker = new SharedWorker('sw.js');
+
+          //傳送姓名到sharedworker中
+          worker.port.start();
+          //將資料傳給sw.js
+          worker.port.postMessage({"name":"Jack"});
+
+          //接收sharedworker回傳的結果
+          worker.port.addEventListener("message",function(event){
+              document.querySelector('#div1').innerHTML = event.data
+          })
+      })
+    </script>
+</body>
+</html>

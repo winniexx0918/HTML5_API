@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO canvas</title>
+    <style>
+      #myCanvas {
+        border: 1px green solid;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="color" id="color1" />
+    <input type="number" min="2" max="20" step="2" id="number1" value="2" />
+    <br />
+    <canvas id="myCanvas" width="400" height="300"></canvas>
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+      var flag,
+        c = "black",
+        w = 4;
+
+      //開始畫圖
+      canvas.addEventListener(
+        "mousedown",
+        function() {
+          flag = true;
+          context.beginPath();
+          c = document.getElementById("color1").value;
+          w = document.getElementById("number1").value;
+          context.strokeStyle = c;
+          context.lineWidth = w;
+          context.moveTo(event.offsetX, event.offsetY);
+          send(event.offsetX, event.offsetY, "mousedown", c, w);
+        },
+        false
+      );
+
+      //畫圖中
+      canvas.addEventListener(
+        "mousemove",
+        function() {
+          if (flag) {
+            context.lineTo(event.offsetX, event.offsetY);
+            send(event.offsetX, event.offsetY, "mousemove", c, w);
+            context.stroke();
+          }
+        },
+        false
+      );
+
+      //結束畫圖
+      canvas.addEventListener(
+        "mouseup",
+        function() {
+          flag = false;
+        },
+        false
+      );
+
+      //todo1 將下列________換成建立Socket物件的程式碼，連線到 ws://localhost:8080/
+      var socket = new WebSocket("ws://localhost:8080/");
+
+      function send(x, y, type, c, w) {
+        var jsonObj = { x: x, y: y, type: type, c: c, w: w };
+        //todo2 將下列________換成適當的方法將資料傳給Socket Server
+        socket.send(JSON.stringify(jsonObj));
+      }
+
+      //todo3 將下列________換成適當的事件，來接收Socket Server回傳的結果
+      socket.addEventListener(
+        "message",
+        function(event) {
+          //todo4 將下列________換成適當的程式，來接收Socket Server回傳的結果
+          var data = JSON.parse(event.data);
+          if (data.type === "mousedown") {
+            context.beginPath();
+            context.strokeStyle = data.c;
+            context.lineWidth = data.w;
+            context.moveTo(data.x, data.y);
+          } else if (data.type === "mousemove") {
+            context.lineTo(data.x, data.y);
+            context.stroke();
+          } else {
+            return context.closePath();
+          }
+        },
+        false
+      );
+    </script>
+  </body>
+</html>

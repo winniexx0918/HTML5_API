@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Server Sent Event</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <input type="button" id="button1" value="啟動" />
+    <hr />
+    <div id="content"></div>
+    <script>
+        document.querySelector('#button1').addEventListener("click", function () {
+            //todo1：建立EventSource物件，與 Server Sent Event Server ('/api/youbike')建立連線
+
+            if (this.value == "啟動") {
+                this.value = "停止";
+                //todo2：連線成功會引發什麼事件，將______換成適當的事件
+                source.addEventListener('______', function (e) {
+                    document.getElementById('content').innerHTML += '已連線..<br/>';
+                });
+                //todo3：接收Server傳回來的結果，要使用甚麼事件，將______換成適當的事件
+                source.addEventListener('_____', function (e) {
+                    var data = JSON.parse(e.data);
+                    var msg = "";
+                    msg += "<b>站名 :</b> " + data.retVal["0001"].sna;
+                    msg += "<b> 更新時間：</b>" + ConvertTime(data.retVal["0001"].mday);
+                    msg += "<b> 目前停車數量：</b>" + data.retVal["0001"].sbi;
+                    msg += "<b> 空位數量：</b>" + data.retVal["0001"].bemp + "<br>";
+                    document.getElementById('content').innerHTML += msg + '<br/>';
+                });
+            } else {
+                this.value = "啟動";
+                document.getElementById('content').innerHTML += '停止連線..<br/>';
+                //todo4 要關閉跟Server Sent Event Server 的連線，要呼叫什麼方法?
+
+            }
+        })
+
+        //將YYYYMMDDHHMMSS的時間格式轉成YYYY/MM/DD HH:MM:SS
+        function ConvertTime(OldTime) {
+            return OldTime.substring(0, 4) + "/" + OldTime.substring(4, 6) + "/" + OldTime.substring(6, 8) + " " +
+                OldTime.substring(8, 10) + ":" + OldTime.substring(10, 12) + ":" + OldTime.substring(12, 14);
+        }
+    </script>
+</body>
+
+</html>

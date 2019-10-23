@@ -1,0 +1,109 @@
+﻿
+/*頁面樣式*/
+html {
+    height: 100%;
+}
+
+body {
+    background: #ececec;
+    margin: 0;
+    padding: 0;
+    font: 13px/1.5 helvetica, arial, san-serif;
+    height: 100%;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+h2 {
+    position: absolute;
+    bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+    /*display:none;*/
+}
+
+/*產品樣式*/
+p {
+    margin: 0;
+}
+
+#products {
+    float: left;
+    list-style: none;
+    width: 60%;
+    padding: 0;
+}
+
+    #products li {
+        display: inline;
+    }
+
+.item {
+    display: block;
+    float: left;
+    width: 180px;
+    height: 180px;
+    margin: 10px;
+    border: 1px solid #494949;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+    .item img {
+        border: 0;
+        margin: 10px auto;
+        width: 160px;
+        height: 160px;
+    }
+
+    .item div {
+        background: rgb(0, 0, 0);
+        background: rgba(0, 0, 0, 0.5);
+        position: relative;
+        bottom: 69px;
+        color: #f3f3f3;
+        padding: 5px 0;
+        display: none;
+    }
+
+/*購物車樣式*/
+#cart {
+    float: right;
+    background-color: #ccc;
+    width: 25%;
+    padding: 0 5%;
+    height: 100%;
+}
+
+    #cart ul {
+        padding: 0;
+    }
+
+    #cart li {
+        list-style: none;
+        border-bottom: 1px solid #494949;
+        padding: 5px;
+    }
+
+    #cart .quantity {
+        font-weight: bold;
+        padding-right: 10px;
+        margin-right: 10px;
+        border-right: 1px solid #494949;
+        display: inline-block;
+        width: 15px;
+        text-align: right;
+    }
+
+    #cart .price {
+        float: right;
+    }
+
+#total {
+    float: right;
+}
